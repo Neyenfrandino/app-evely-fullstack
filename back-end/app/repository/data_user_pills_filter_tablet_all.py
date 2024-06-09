@@ -76,7 +76,7 @@ def data_user_pills_filter_tablet_all(user_id, db):
                 detail="No se encontraron datos."
             )
 
-        print(json.dumps(result, indent=4, ensure_ascii=False))
+        # print(json.dumps(result, indent=4, ensure_ascii=False))
 
         return result
 

@@ -18,6 +18,7 @@ class User(Base):
     profile_photo= Column(LargeBinary)
     email= Column(String, nullable=False, unique= True)
     nationalidad= Column(String)
+    imagen_recognition_face= Column(LargeBinary, unique= True)
 
     pastillas_tabla_relation = relationship('Pastillas_tabla', backref='user_relation', cascade='delete,merge')
 

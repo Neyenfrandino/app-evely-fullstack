@@ -6,3 +6,10 @@ Alembic
 passlib[bcrypt]
 python-jose[cryptography]
 python-multipart
+
+face_recognition
+numpy
+opencv-python
+cmake 
+dlib
+Pillow
