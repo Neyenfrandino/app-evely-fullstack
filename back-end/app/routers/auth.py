@@ -19,7 +19,7 @@ def login(usuario:OAuth2PasswordRequestForm = Depends(), db:Session = Depends(ge
 async def upload_image(imageData: dict, db: Session = Depends(get_db)):
     received_text = imageData.get("imageData")
     response = auth.compare_images(received_text, db)
-    # print(response)
+
     return response
     
     

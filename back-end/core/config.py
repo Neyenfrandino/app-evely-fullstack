@@ -4,8 +4,9 @@ from pathlib import Path
 
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
-print(os.getenv('POSTGRES_DB'))	
-
+# print(os.getenv('POSTGRES_DB'))	
+# print(os.getenv('POSTGRES_USER'))
+# print(os.getenv('POSTGRES_PASSWORD'))
 
 class Settings:
     PROJECT_NAME: str = 'PROYECTO-EVELY-FULL-STACK'
@@ -16,7 +17,8 @@ class Settings:
     POSTGRES_SERVER: str = os.getenv('POSTGRES_SERVER')
     POSTGRES_PORT: str = os.getenv('POSTGRES_PORT')
 
-    DATABASE_URL = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}'  
+    DATABASE_URL = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}'
 
+def get_settings():
+    return Settings()
 
-settings = Settings()

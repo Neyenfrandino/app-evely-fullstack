@@ -69,7 +69,7 @@ def decode_base64_image(file):
         return imagen
     except Exception as e:
         print(f"Error al decodificar la imagen base64: {e}")
-        return None
+        return f"Error al decodificar la imagen base64: {e}"
     
 # Caché para imágenes decodificadas
 decode_cache = {}
@@ -88,17 +88,25 @@ def codificar(imagenes):
 
     for imagen in imagenes:
         imagen = cv2.cvtColor(imagen, cv2.COLOR_BGR2RGB)
-        codificado = fr.face_encodings(imagen)[0]
-        lista_codificada.append(codificado)
-
+        codificaciones = fr.face_encodings(imagen)
+        if codificaciones:
+            codificado = codificaciones[0]
+            lista_codificada.append(codificado)
+        else:
+            print("Advertencia: No se detectaron caras en una de las imágenes proporcionadas.")
+    
     return lista_codificada
 
 def get_user(user_all):
-
     mis_imagenes = []
 
     for user in user_all:
         imagen = user.profile_photo
+
+        if imagen is None:
+            print(f"La foto de perfil es None para el usuario {user.id}")
+            continue
+
         photo = imagen.decode('utf-8')  # Convierte los bytes a una cadena UTF-8
 
         if "data:image/jpeg;base64," in photo:
@@ -111,7 +119,6 @@ def get_user(user_all):
             raise ValueError("Formato de imagen no soportado: {}".format(photo[:50]))  # Muestra los primeros 50 caracteres de la cadena 'imagen'
 
         if not base64_data:
-
             print(f"La ruta de la foto de perfil es nula o vacía para el usuario")
             continue
 
@@ -121,12 +128,16 @@ def get_user(user_all):
         # Crear un objeto de imagen a partir de los bytes decodificados
         image = Image.open(BytesIO(image_data))
 
-        # Guardar la imagen en un archivo
-        image.save('imagen_decodificada.jpg', 'JPEG')
-        # Redimensionar la imagen si se decodificó correctamente
+        # Convertir la imagen a modo RGB si es necesario
+        if image.mode == 'RGBA':
+            image = image.convert('RGB')
 
+        # Guardar la imagen en un archivo (opcional, solo si es necesario para depuración)
+        image.save('imagen_decodificada.jpg', 'JPEG')
+
+        # Convertir la imagen a un array de numpy
         image_np = np.array(image)
-        imagen_actual = {'imagen': resize_image(image_np), 'id': user.id}
+        imagen_actual = {'imagen': image_np, 'id': user.id}
         mis_imagenes.append(imagen_actual)
 
     return mis_imagenes
@@ -168,6 +179,7 @@ def compare_images(file, db):
         else:
             # Obtener el id del usuario que coincide
             user_id = mis_imagenes[indice_coincidencia]['id']
+         
             # Usar el id para obtener más información del usuario si es necesario
             usuario = db.query(models.User).filter(models.User.id == user_id).first()
 

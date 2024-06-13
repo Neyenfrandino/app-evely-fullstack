@@ -13,4 +13,5 @@ router = APIRouter(prefix="/data_user_pills_filter_tablet_all",
 @router.get('/data_user_pills_filter_tablet_all/{user_id}')
 def dataUserPillsFilterTabletAll(user_id: int , db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     response = data_user_pills_filter_tablet_all.data_user_pills_filter_tablet_all(user_id, db)
+    # print(response, "responseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     return response
